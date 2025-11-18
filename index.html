@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="pic/favicon.ico" type="image/x-icon">
+    <title>臺灣前三年選舉情況</title>
+    <script src="https://unpkg.com/d3@5.6.0/dist/d3.min.js"></script>
+    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.js"></script>
+    <link rel="stylesheet" href="CSS/Star_Background.css">
+    <link rel="stylesheet" href="CSS/Style_Index.css">
+    <script src="JS/index.js" defer></script>
+  </head>
+  <body>
+    <div class="title">
+      臺灣前三年選舉分佈地圖
+    </div>
+    <!-- 長條圖 -->
+    <div id="content"></div>
+   
+    <!-- 選擇年份的下拉式選單 -->
+    <p class="text">年份選擇:</p>
+    <div id="select_county_year">
+      
+      <select id="County_yearSelect">
+        <option value="2016">2016</option>
+        <option value="2020">2020</option>
+        <option value="2024" selected>2024</option>
+      </select>
+    </div>
+
+    <div id="select_town_year">
+    </div>
+
+    <!-- 上一層按鈕-->
+    <div id="btn" Align="Center"></div>
+    <!-- 星空背景 -->
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+
+    <svg id="map" width="900" height="1200">
+    </svg>
+    
+  </body>
+</html>
