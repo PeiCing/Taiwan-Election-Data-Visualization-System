@@ -13,7 +13,7 @@ app.use(express.json());
 // 載入選舉資料
 let electionData = {};
 try {
-  const dataPath = path.join(__dirname, 'election_data.json');
+  const dataPath = path.join(__dirname, 'election_data_with_town.json');
   const rawData = fs.readFileSync(dataPath, 'utf8');
   electionData = JSON.parse(rawData);
   console.log('✅ Election data loaded successfully');
