@@ -50,16 +50,36 @@ function drawMapAndFetchData_Town(CountyTown,selectedYear,clickedCountyBounds) {
 /* -----------------獲取API資料------------------ */
 async function fetchVotingData(area, year) {
   //const url = 'http://wwweb2024.csie.io:52000/api.php';
-  const url = 'http://localhost:52000/api.php';
-  const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
-  const headers = {
+  //const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
+  /*const headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Token ' + token
+  };*/
+  const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + API_TOKEN
   };
   const body = JSON.stringify({ area: area, year: year });
 
-  try {
+  /*try {
       const response = await fetch(url, {
+          method: 'POST',
+          headers: headers,
+          body: body
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          console.log('Data received:', data);
+          return data;
+      } else {
+          throw new Error('Network response was not ok: ' + response.statusText);
+      }
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }*/
+  try {
+      const response = await fetch(API_URL, {
           method: 'POST',
           headers: headers,
           body: body
@@ -80,15 +100,18 @@ async function fetchVotingData(area, year) {
 /* -----------------獲取城市API資料------------------ */
 async function fetchVotingDataByCounty(area, year, CountyName) {
   //const url = 'http://wwweb2024.csie.io:52000/api.php';
-  const url = 'http://localhost:52000/api.php';
-  const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
-  const headers = {
+  //const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
+  /*const headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Token ' + token
+  };*/
+  const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + API_TOKEN
   };
   const body = JSON.stringify({ area: area, year: year, County: CountyName });
 
-  try {
+  /*try {
       const response = await fetch(url, {
           method: 'POST',
           headers: headers,
@@ -104,7 +127,24 @@ async function fetchVotingDataByCounty(area, year, CountyName) {
       }
   } catch (error) {
       console.error('Error fetching data:', error);
-  }
+  }*/
+  try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: headers,
+            body: body
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            //console.log('Data received for', CountyName, ':', data);
+            return data;
+        } else {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 /* --------------------------------------------- */
