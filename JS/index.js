@@ -295,13 +295,31 @@ async function drawMapWithVotingData_County(area, year) {
 
           const CountyName = d.properties.COUNTYNAME;
           updateCountyName(CountyName);
-          fetchVotingDataByCounty('臺灣', year, CountyName)
+          /*fetchVotingDataByCounty('臺灣', year, CountyName)
           .then(electionData => {
             const CountyData = electionData.find(data => data.full_district_name === CountyName);
             if (CountyData) {
               drawBarChart(CountyData);
             }
+          });*/
+          fetchVotingData(CountyName, year)
+          .then(electionData => {
+            if (!electionData) {
+              console.error('No data returned for', CountyName);
+              return;
+            }
+
+            const CountyData = electionData.find(
+              data => data.full_district_name === CountyName
+            );
+
+            if (CountyData) {
+              drawBarChart(CountyData);
+            } else {
+              console.warn('No matching data for', CountyName, 'in response:', electionData);
+            }
           });
+
           // 更改路径样式以显示准备被点击的效果
           // 添加浮起效果
           d3.select(this)
