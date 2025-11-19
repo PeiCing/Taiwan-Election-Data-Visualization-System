@@ -49,7 +49,8 @@ function drawMapAndFetchData_Town(CountyTown,selectedYear,clickedCountyBounds) {
 
 /* -----------------獲取API資料------------------ */
 async function fetchVotingData(area, year) {
-  const url = 'http://wwweb2024.csie.io:52000/api.php';
+  //const url = 'http://wwweb2024.csie.io:52000/api.php';
+  const url = 'http://localhost:52000/api.php';
   const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
   const headers = {
       'Content-Type': 'application/json',
@@ -78,7 +79,8 @@ async function fetchVotingData(area, year) {
 
 /* -----------------獲取城市API資料------------------ */
 async function fetchVotingDataByCounty(area, year, CountyName) {
-  const url = 'http://wwweb2024.csie.io:52000/api.php';
+  //const url = 'http://wwweb2024.csie.io:52000/api.php';
+  const url = 'http://localhost:52000/api.php';
   const token = 'h6kcdm9pazx7j9xd'; // 提供的认证Token
   const headers = {
       'Content-Type': 'application/json',

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 測試工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .response-area {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .success {
+            color: #27ae60;
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .example-btn {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .example-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Taiwan Election API 測試工具</h1>
+
+        <div class="card">
+            <div class="info-box">
+                <strong>📡 API 狀態: </strong>
+                <span id="apiStatus" class="status offline">檢查中...</span>
+            </div>
+
+            <div class="form-group">
+                <label>API URL</label>
+                <input type="text" id="apiUrl" value="http://localhost:52000/api.php" placeholder="輸入 API URL">
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    本地: http://localhost:52000/api.php<br>
+                    Render: https://你的網址.onrender.com/api.php
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label>Authorization Token</label>
+                <input type="text" id="token" value="h6kcdm9pazx7j9xd" placeholder="輸入 Token">
+            </div>
+
+            <div class="form-group">
+                <label>Area (地區)</label>
+                <select id="area">
+                    <option value="Taiwan">Taiwan (全台灣)</option>
+                    <option value="台北市">台北市</option>
+                    <option value="新北市">新北市</option>
+                    <option value="桃園市">桃園市</option>
+                    <option value="臺中市">台中市</option>
+                    <option value="臺南市">台南市</option>
+                    <option value="高雄市">高雄市</option>
+                    <option value="基隆市">基隆市</option>
+                    <option value="新竹市">新竹市</option>
+                    <option value="嘉義市">嘉義市</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Year (年份)</label>
+                <select id="year">
+                    <option value="2024" selected>2024</option>
+                    <option value="2020">2020</option>
+                    <option value="2016">2016</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>County (鄉鎮 - 選填)</label>
+                <input type="text" id="county" placeholder="例如: 中正區 (選填)">
+            </div>
+
+            <button class="btn" onclick="testAPI()">🚀 發送請求</button>
+        </div>
+
+        <div class="card">
+            <h2>快速測試範例</h2>
+            <div class="examples">
+                <button class="example-btn" onclick="loadExample('taiwan2024')">
+                    📊 2024 全台資料
+                </button>
+                <button class="example-btn" onclick="loadExample('taipei2024')">
+                    🏙️ 台北市 2024
+                </button>
+                <button class="example-btn" onclick="loadExample('kaohsiung2024')">
+                    🌆 高雄市 2024
+                </button>
+                <button class="example-btn" onclick="loadExample('town')">
+                    🏘️ 鄉鎮資料測試
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📤 API 回應</h2>
+            <div id="response" class="response-area">等待請求...</div>
+        </div>
+    </div>
+
+    <script>
+        // 檢查 API 狀態
+        async function checkAPIStatus() {
+            const statusEl = document.getElementById('apiStatus');
+            const apiUrl = document.getElementById('apiUrl').value.replace('/api.php', '');
+            
+            try {
+                const response = await fetch(`${apiUrl}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusEl.textContent = '✅ 線上';
+                    statusEl.className = 'status online';
+                } else {
+                    throw new Error('API offline');
+                }
+            } catch (error) {
+                statusEl.textContent = '❌ 離線';
+                statusEl.className = 'status offline';
+            }
+        }
+
+        // 測試 API
+        async function testAPI() {
+            const responseEl = document.getElementById('response');
+            const apiUrl = document.getElementById('apiUrl').value;
+            const token = document.getElementById('token').value;
+            const area = document.getElementById('area').value;
+            const year = parseInt(document.getElementById('year').value);
+            const county = document.getElementById('county').value;
+
+            responseEl.innerHTML = '<div class="loading">⏳ 發送請求中...</div>';
+
+            const requestBody = {
+                area: area,
+                year: year
+            };
+
+            if (county) {
+                requestBody.County = county;
+            }
+
+            const requestInfo = {
+                url: apiUrl,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`
+                },
+                body: requestBody
+            };
+
+            try {
+                const startTime = performance.now();
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${token}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const endTime = performance.now();
+                const responseTime = (endTime - startTime).toFixed(2);
+
+                const data = await response.json();
+
+                let output = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+                output += '📨 REQUEST\n';
+                output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+                output += JSON.stringify(requestInfo, null, 2);
+                output += '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+                output += `📥 RESPONSE (${response.status} - ${responseTime}ms)\n`;
+                output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+                
+                if (response.ok) {
+                    output += JSON.stringify(data, null, 2);
+                    responseEl.innerHTML = `<div class="success">${output}</div>`;
+                } else {
+                    output += JSON.stringify(data, null, 2);
+                    responseEl.innerHTML = `<div class="error">${output}</div>`;
+                }
+            } catch (error) {
+                const output = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ ERROR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${error.message}
+
+可能原因:
+1. API 伺服器未啟動
+2. URL 錯誤
+3. CORS 問題
+4. 網路連線問題`;
+                responseEl.innerHTML = `<div class="error">${output}</div>`;
+            }
+        }
+
+        // 載入範例
+        function loadExample(type) {
+            switch(type) {
+                case 'taiwan2024':
+                    document.getElementById('area').value = 'Taiwan';
+                    document.getElementById('year').value = '2024';
+                    document.getElementById('county').value = '';
+                    break;
+                case 'taipei2024':
+                    document.getElementById('area').value = '台北市';
+                    document.getElementById('year').value = '2024';
+                    document.getElementById('county').value = '';
+                    break;
+                case 'kaohsiung2024':
+                    document.getElementById('area').value = '高雄市';
+                    document.getElementById('year').value = '2024';
+                    document.getElementById('county').value = '';
+                    break;
+                case 'town':
+                    document.getElementById('area').value = '台北市';
+                    document.getElementById('year').value = '2024';
+                    document.getElementById('county').value = '中正區';
+                    break;
+            }
+            testAPI();
+        }
+
+        // 頁面載入時檢查 API 狀態
+        window.onload = function() {
+            checkAPIStatus();
+            setInterval(checkAPIStatus, 30000); // 每 30 秒檢查一次
+        };
+    </script>
+</body>
+</html>
