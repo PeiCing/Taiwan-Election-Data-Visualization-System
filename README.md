@@ -1,8 +1,9 @@
-展示: 
+**展示:** 
 https://youtu.be/G-8o1FGUdOM?si=DWZs2qVrLKVWx93V
 
-Demo 網址：
+**Demo 網址：**
 https://taiwan-election-data-visualization.onrender.com
+⚠️ 注意：使用免費方案，閒置後首次訪問需要 30 秒喚醒時間
 
 原始專案所依賴的公開 API 目前已無法連線，因此本系統改以先前取得之部分 JSON 資料，重新架設一支 Mock API（/api.php），提供 2016、2020、2024 年的縣市層級選舉結果。
 
