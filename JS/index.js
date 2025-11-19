@@ -518,6 +518,10 @@ function updateCountyName(CountyName) {
 /* 绘制条形图 */
 function drawBarChart(electionData) {
   const barChartSvg = document.getElementById("bar");
+  if (!barChartSvg) {
+    console.warn('drawBarChart 被呼叫時，找不到 id="bar" 的元素，可能是視圖已切換或按了上一層。略過繪圖。');
+    return;
+  }
   /*
   console.log(electionData);
   console.log(electionData.candidate1_name);
